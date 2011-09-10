@@ -4,3 +4,20 @@
 <div data-role="header" data-position="fixed">
 	<h1>Fixed toolbars</h1>
 </div>
+
+#{set 'moreScripts'}
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function() {
+	navigator.geolocation.getCurrentPosition(showMap);
+});
+
+
+function showMap(position) {
+	console.log(position);
+	console.log(position.coords);
+	console.log(position.coords.latitude);
+	console.log(position.coords.longitude);
+}
+</script>
+#{/set}
