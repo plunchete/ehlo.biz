@@ -23,3 +23,20 @@
 			</ul>
 	</div><!--/content-primary -->
 </div>
+
+#{set 'moreScripts'}
+<script type="text/javascript" charset="utf-8">
+
+$(document).ready(function() {
+	navigator.geolocation.getCurrentPosition(showMap);
+});
+
+
+function showMap(position) {
+	console.log(position);
+	console.log(position.coords);
+	console.log(position.coords.latitude);
+	console.log(position.coords.longitude);
+}
+</script>
+#{/set}
