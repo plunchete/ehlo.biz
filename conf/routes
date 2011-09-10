@@ -4,7 +4,7 @@
 
 # Home page
 GET     /                                       Application.index
-GET     /4sqlogin								Listener.auth4SQ
+GET     /4sqlogin								FourSquare.auth4SQ
 
 # Map static resources from the /app/public folder to the /public path
 GET     /public/                                staticDir:public
