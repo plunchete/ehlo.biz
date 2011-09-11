@@ -6,7 +6,7 @@ import play.mvc.Router;
 import siena.Json;
 import controllers.Constants;
 
-public class FourSquareHelper {
+public class BigBrotherHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
@@ -109,6 +109,13 @@ public class FourSquareHelper {
 					item.put("id", uid);
 					item.put("contact", queryByUserId(uid, token));
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
+					Json services = Json.map();
+					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
+					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
+						services = tempServices;
+					}
+					item.put("services", services);
+					
 					people.add(item);
 				}
 			}
