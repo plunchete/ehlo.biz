@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.User;
+import play.Logger;
 import play.mvc.Router;
 import siena.Json;
 import controllers.Constants;
@@ -47,7 +48,9 @@ public class BigBrotherHelper {
 	public static Json consume4SQCoordinates(String coordinates, String token){
 		String url = END_POINTS_URL + token + "&ll="+coordinates + "&v=20110910";
 		try {
+			Logger.info("url -> " + url);
 			Json results=URLHelper.fetchJson(url);
+			Logger.info("results " + results.toString());
 			return(results);
 		} catch (Exception e) {
 			e.printStackTrace();

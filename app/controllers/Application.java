@@ -32,8 +32,9 @@ public class Application extends Controller {
     
     public static void renderVenues() {
     	String coordinates = session.get("latitude") + "," + session.get("longitude");
+    	Logger.info(coordinates);
     	Json venues = BigBrotherHelper.getVenues(coordinates, session.get("token"));
-    	render("application/venues-list.html", venues);
+    	render("Application/venues-list.html", venues);
     }
     
     public static void callBack4SQAuth(){
@@ -45,12 +46,12 @@ public class Application extends Controller {
 	
 	public static void showUser(String id) {
 		User user = User.all().filter("id", id).get();
-		render("application/user-view.html", user);
+		render("Application/user-view.html", user);
 	}
     
     public static void renderUsers(String venueId) {
     	List<User> peopleHere = BigBrotherHelper.queryVenue(venueId, session.get("token"));
-    	render("application/people-list.html", peopleHere);
+    	render("Application/people-list.html", peopleHere);
     }
     
 }
