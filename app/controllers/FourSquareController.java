@@ -1,12 +1,14 @@
 package controllers;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import play.mvc.Controller;
 import play.mvc.Router;
 import play.mvc.results.Redirect;
 import siena.Json;
 import utils.URLHelper;
-import controllers.Application;
 
 public class FourSquareController extends Controller {
 	private String endPointsUriBase="https://api.foursquare.com/v2/venues/5104?oauth_token=";
@@ -14,7 +16,20 @@ public class FourSquareController extends Controller {
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
 	private static String VENUE_DETAILS= "https://api.foursquare.com/v2/venues/";
+	private static String USER_DETAILS= " https://foursquare.com/users/";
 
+
+	private static Json queryByUserId(String uid){
+		Json data = Json.map();
+		String url = USER_DETAILS+uid+"?oauth_token="+Constants.API_TOKEN_4SQ;
+		try {
+			Json userData = URLHelper.fetchJson(url);
+			data = userData.get("response").get("user").get("contact");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return data;
+	}
 
 	public static Json queryVenue(String venueId){
 		String url = VENUE_DETAILS+venueId+"?oauth_token"+Constants.API_TOKEN_4SQ;
@@ -23,6 +38,7 @@ public class FourSquareController extends Controller {
 			Json details = URLHelper.fetchJson(url).get("hereNow");
 			hereNow.put("count", details.get("count"));
 			hereNow.put("people", Json.list());
+			Json people = Json.list();
 			for(Json json : details.get("groups")){
 				String type = json.get("type").str();
 				Json items = json.get("items");
@@ -33,10 +49,13 @@ public class FourSquareController extends Controller {
 					item.put("firstName", json2.get("user").get("firstName")); 
 					item.put("lastName", json2.get("user").get("lastName"));
 					item.put("photo", json2.get("user").get("photo")); 
-					item.put("id", json2.get("user").get("id")); 
-					hereNow.get("people").add(item);
+					String uid=json2.get("user").get("id").str();
+					item.put("id", uid);
+					item.put("contact", queryByUserId(uid));
+					people.add(item);
 				}
 			}
+			hereNow.put("people", people);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
