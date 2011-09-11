@@ -18,6 +18,12 @@ public class Application extends Controller {
     }
 
     public static void doLogin(String latitude, String longitude) {
+    	if (latitude == null || latitude.isEmpty()) {
+    		latitude = "37.7712498";
+    	}
+    	if (longitude == null || longitude.isEmpty()) {
+    		longitude = "-122.4048177";
+    	}
     	//TODO check we receive latitude and longitude
     	session.put("latitude", latitude);
     	session.put("longitude", longitude);
