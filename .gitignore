@@ -4,3 +4,8 @@ app/views/.DS_Store
 public/.DS_Store
 public/images/.DS_Store
 tmp
+.classpath
+.project
+.settings/
+bin/
+eclipse/

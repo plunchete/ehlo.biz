@@ -1,5 +1,7 @@
 package utils;
 
+import controllers.Constants;
+import play.Logger;
 import play.mvc.Router;
 import siena.Json;
 import controllers.Constants;
@@ -21,16 +23,27 @@ public class FourSquareHelper {
 			processedVenue.put("id", json.get("id"))
 							.put("name", json.get("name"))
 							.put("address", json.get("location").get("address"))
-							.put("categories", json.get("categories").get("parents"))
-							.put("image", json.get("categories").get("icon"))
 							.put("count", json.get("hereNow").get("count"));
+			if (json.containsKey("categories") && !json.get("categories").isEmpty() && json.get("categories").at(0).containsKey("parents")) {
+				processedVenue.put("categories", json.get("categories").at(0).get("parents"));
+			} else {
+				processedVenue.put("categories", "[\"Home, Work, Others\"]");
+				
+			}
+			
+			if (json.containsKey("categories") && !json.get("categories").isEmpty() && json.get("categories").at(0).containsKey("icon")) {
+				processedVenue.put("image", json.get("categories").at(0).get("icon"));
+			} else {
+				processedVenue.put("image", "https://foursquare.com/img/categories/building/default.png");
+			}
+			
 			processedVenues.add(processedVenue);
 		}
 		return processedVenues;
 	}
 	
-	public static Json consume4SQCoordinates(String coordinates){
-		String url = END_POINTS_URL+Constants.API_TOKEN_4SQ+"&ll="+coordinates;
+	public static Json consume4SQCoordinates(String coordinates, String token){
+		String url = END_POINTS_URL + token + "&ll="+coordinates;
 		try {
 			Json results=URLHelper.fetchJson(url);
 			return(results);
@@ -55,15 +68,16 @@ public class FourSquareHelper {
 		}
 		return null;
 	}
-	public static Json getVenues(String coordinates){
-		Json rawVenues = consume4SQCoordinates(coordinates);
+	public static Json getVenues(String coordinates, String token){
+		Logger.info(coordinates);
+		Json rawVenues = consume4SQCoordinates(coordinates, token);
 		Json venues = processEndPointSearchJson(rawVenues);
 		return venues;
 	}
 	
-	private static Json queryByUserId(String uid){
+	private static Json queryByUserId(String uid, String token){
 		Json data = Json.map();
-		String url = USER_DETAILS+uid+"?oauth_token="+Constants.API_TOKEN_4SQ;
+		String url = USER_DETAILS+uid+"?oauth_token=" + token;
 		try {
 			Json userData = URLHelper.fetchJson(url);
 			data = userData.get("response").get("user").get("contact");
@@ -73,8 +87,8 @@ public class FourSquareHelper {
 		return data;
 	}
 	
-	public static Json queryVenue(String venueId){
-		String url = VENUE_DETAILS+venueId+"?oauth_token"+Constants.API_TOKEN_4SQ;
+	public static Json queryVenue(String venueId, String token) {
+		String url = VENUE_DETAILS+venueId+"?oauth_token" + token;
 		Json hereNow = Json.map();
 		try {
 			Json details = URLHelper.fetchJson(url).get("hereNow");
@@ -93,7 +107,7 @@ public class FourSquareHelper {
 					item.put("photo", json2.get("user").get("photo")); 
 					String uid=json2.get("user").get("id").str();
 					item.put("id", uid);
-					item.put("contact", queryByUserId(uid));
+					item.put("contact", queryByUserId(uid, token));
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
 					people.add(item);
 				}
