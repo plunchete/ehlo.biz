@@ -1,10 +1,7 @@
 package utils;
 
-import controllers.Constants;
-import play.Logger;
 import play.mvc.Router;
 import siena.Json;
-import controllers.Constants;
 
 public class BigBrotherHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
@@ -45,7 +42,6 @@ public class BigBrotherHelper {
 	public static Json consume4SQCoordinates(String coordinates, String token){
 		String url = END_POINTS_URL + token + "&ll="+coordinates + "&v=20110910";
 		try {
-			Logger.info("url " + url);
 			Json results=URLHelper.fetchJson(url);
 			return(results);
 		} catch (Exception e) {
@@ -69,8 +65,7 @@ public class BigBrotherHelper {
 		}
 		return null;
 	}
-	public static Json getVenues(String coordinates, String token){
-		Logger.info(coordinates);
+	public static Json getVenues(String coordinates, String token) {
 		Json rawVenues = consume4SQCoordinates(coordinates, token);
 		Json venues = processEndPointSearchJson(rawVenues);
 		return venues;
@@ -98,8 +93,7 @@ public class BigBrotherHelper {
 			hereNow.put("count", details.get("count"));
 			hereNow.put("people", Json.list());
 			Json people = Json.list();
-			for(Json json : details.get("groups")){
-				Logger.info("here");
+			for (Json json : details.get("groups")) {
 				String type = json.get("type").str();
 				Json items = json.get("items");
 				if(items.isEmpty() || items.isNull()) continue;
@@ -114,6 +108,7 @@ public class BigBrotherHelper {
 					item.put("id", uid);
 					item.put("contact", contactInfo);
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
+					item.put("tags", getTags(item.get("bio")));
 					Json services = Json.map();
 					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
 					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
@@ -125,6 +120,9 @@ public class BigBrotherHelper {
 					if (contactInfo.containsKey("twitter") && !services.containsKey("twitter")) {
 						services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
 					}
+					if (!services.containsKey("foursquare")) {
+						services.put("foursquare", Json.map().put("url", "https://foursquare.com/" + uid).put("username", uid));
+					}
 					item.put("services", services);
 					
 					people.add(item);
@@ -135,6 +133,20 @@ public class BigBrotherHelper {
 			e.printStackTrace();
 		}
 		return hereNow;
+	}
+	
+	private static Json getTags(Json bio){
+		Json tags = Json.list();
+		if ( bio == null || bio.isNull() || bio.isEmpty()) return tags;
+		String sBio = " "+bio.str().replaceAll(",", " ").toLowerCase()+" ";
+		for( String tag : Constants.tags){
+			if(sBio.contains(tag)){
+				tags.add(tag);
+				sBio = sBio.replaceAll(tag, "");
+			}
+		}
+		System.out.println(tags);
+		return tags;
 	}
 	
 }
