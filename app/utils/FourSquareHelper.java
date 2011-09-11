@@ -3,8 +3,8 @@ package utils;
 import controllers.Constants;
 import play.Logger;
 import play.mvc.Router;
-import play.mvc.results.Redirect;
 import siena.Json;
+import controllers.Constants;
 
 public class FourSquareHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
@@ -109,6 +109,7 @@ public class FourSquareHelper {
 					String uid=json2.get("user").get("id").str();
 					item.put("id", uid);
 					item.put("contact", queryByUserId(uid, token));
+					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
 					people.add(item);
 				}
 			}

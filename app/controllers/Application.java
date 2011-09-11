@@ -1,8 +1,6 @@
 package controllers;
 
-import play.Logger;
-import play.mvc.*;
-import play.mvc.results.Redirect;
+import play.mvc.Controller;
 import siena.Json;
 import utils.FourSquareHelper;
 

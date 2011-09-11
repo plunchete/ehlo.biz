@@ -1,15 +1,10 @@
 package controllers;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import play.mvc.Controller;
 import play.mvc.Router;
 import play.mvc.results.Redirect;
-import siena.Json;
 import utils.FourSquareHelper;
-import utils.URLHelper;
 
 public class FourSquareController extends Controller {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
