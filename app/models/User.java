@@ -1,5 +1,9 @@
 package models;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import controllers.Constants;
 import siena.Column;
 import siena.Generator;
 import siena.Id;
@@ -49,6 +53,23 @@ public class User extends Model {
 	
 	public static Query<User> all() {
         return Model.all(User.class);
+	}
+	
+	public List<String> getTags(int limit) {
+		List<String> tags = new ArrayList<String>();
+		if ( bio == null || bio.isEmpty()) return tags;
+		
+		String sBio = " " + bio.replaceAll(",", " ").toLowerCase()+" ";
+		for( String tag : Constants.tags){
+			if(sBio.contains(tag)){
+				tags.add(tag);
+				sBio = sBio.replaceAll(tag, "");
+			}
+		}
+		if (limit > 0 && tags.size() > limit) {
+			return tags.subList(0, limit);
+		}
+		return tags;
 	}
 	
 }

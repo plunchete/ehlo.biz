@@ -29,18 +29,13 @@
 			#{/else}
 		</div>
 	</div>
-	*{<div class="row padding10">
+	<div class="row padding10">
 		<div>
-			<span class="tag">co-founder</span>
-			<span class="tag">angelList</span>
-			<span class="tag">developer</span>
-			<span class="tag">business</span>
-			<span class="tag">co-founder</span>
-			<span class="tag">co-founder</span>
-			<span class="tag">co-founder</span>
-			<span class="tag">co-founder</span>
+			#{list items:user.getTags(0), as:'tag'}
+			<span class="tag">${tag}</span>
+			#{/list}
 		</div>
-	</div>}*
+	</div>
 	#{if user.bio}
 	<div class="row padding10">
 		#{list items:user.services.keys(), as:'service'}

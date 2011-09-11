@@ -25,10 +25,11 @@
 								<img src="${request.getBase()}/public/images/logos/${service}.png" alt="${service}" height="20px" width="20px">
 							#{/list}
 						</div>
-						*{<div>
-							<span class="tag">co-founder</span>
-							<span class="tag">co-founder</span>
-						</div>}*
+						<div>
+							#{list items:person.getTags(3), as:'tag'}
+							<span class="tag">${tag}</span>
+							#{/list}
+						</div>
 					</div>
 				</div>
 			</a>

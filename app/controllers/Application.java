@@ -24,10 +24,6 @@ public class Application extends Controller {
     	FourSquareController.austh4SQ();
     }
     
-//    public static void renderSpinnerAndGetVenues() {
-//    	render("application/prev-venues-list.html");
-//    }
-    
     public static void renderVenues() {
     	String coordinates = session.get("latitude") + "," + session.get("longitude");
     	Json venues = BigBrotherHelper.getVenues(coordinates, session.get("token"));

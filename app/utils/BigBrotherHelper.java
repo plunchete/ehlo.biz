@@ -5,12 +5,12 @@ import java.util.List;
 
 import models.User;
 import play.mvc.Router;
-import play.mvc.Scope.RenderArgs;
 import siena.Json;
+import controllers.Constants;
 
 public class BigBrotherHelper {
-	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
-	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
+	public static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
+	public static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
 	private static String USER_DETAILS= " https://api.foursquare.com/v2/users/";
 	private static String VENUE_DETAILS= "https://api.foursquare.com/v2/venues/";
