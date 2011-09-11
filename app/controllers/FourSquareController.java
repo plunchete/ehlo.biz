@@ -1,6 +1,7 @@
 package controllers;
 
 
+import play.Logger;
 import play.mvc.Controller;
 import play.mvc.Router;
 import play.mvc.results.Redirect;
@@ -22,6 +23,7 @@ public class FourSquareController extends Controller {
 		String redirect = Router.getFullUrl("Application.callBack4SQAuth");
 		String url = "https://foursquare.com/oauth2/authenticate?client_id="+CLIENT_ID+
 											"&response_type=code&redirect_uri="+redirect;	
+		Logger.info("url " + url);
 		throw new Redirect(url);
 	}
 }
