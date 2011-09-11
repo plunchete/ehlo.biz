@@ -22,8 +22,10 @@ public class QwerlyHelper {
 					Json services = info.get("profile").get("services");
 					for (Json json2 : services) {
 						String keyService = json2.get("type").str();
-						allServices.put(keyService, 
+						if (supportedServices.contains(keyService)) {
+							allServices.put(keyService, 
 									Json.map().put("url", json2.get("url")).put("username", json2.get("username")));
+						}
 					}
 					
 				}
