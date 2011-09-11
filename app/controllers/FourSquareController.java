@@ -13,10 +13,35 @@ public class FourSquareController extends Controller {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
-	
+	private static String VENUE_DETAILS= "https://api.foursquare.com/v2/venues/";
+
+
 	public static Json queryVenue(String venueId){
-		
-		return null;
+		String url = VENUE_DETAILS+venueId+"?oauth_token"+Constants.API_TOKEN_4SQ;
+		Json hereNow = Json.map();
+		try {
+			Json details = URLHelper.fetchJson(url).get("hereNow");
+			hereNow.put("count", details.get("count"));
+			hereNow.put("people", Json.list());
+			for(Json json : details.get("groups")){
+				String type = json.get("type").str();
+				Json items = json.get("items");
+				if(items.isEmpty() || items.isNull()) continue;
+				for(Json json2 : items){
+ 					Json item = json.map();
+					item.put("type", type);
+					item.put("firstName", json2.get("user").get("firstName")); 
+					item.put("lastName", json2.get("user").get("lastName"));
+					item.put("photo", json2.get("user").get("photo")); 
+					item.put("id", json2.get("user").get("id")); 
+					hereNow.get("people").add(item);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return hereNow;
 	}
 	
 	public static Json getVenues(String coordinates){
