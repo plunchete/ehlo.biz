@@ -16,6 +16,7 @@
 .mtop10{
 	margin-top:10px;
 }
+
 .mtopm10{
 	margin-top:-10px;
 }
@@ -48,6 +49,10 @@
 	padding:2px;
 }
 
-
-
-
+.main-logo {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	margin-top: -30px;
+	margin-left: -125px;
+}
