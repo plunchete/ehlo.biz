@@ -1,6 +1,11 @@
 package utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import models.User;
 import play.mvc.Router;
+import play.mvc.Scope.RenderArgs;
 import siena.Json;
 
 public class BigBrotherHelper {
@@ -84,54 +89,57 @@ public class BigBrotherHelper {
 		return data;
 	}
 	
-	public static Json queryVenue(String venueId, String token) {
+	public static List<User> queryVenue(String venueId, String token) {
 		String url = VENUE_DETAILS+venueId+"?oauth_token=" + token;
-		Json hereNow = Json.map();
-		
+		List<User> people = new ArrayList<User>();
 		try {
 			Json details = URLHelper.fetchJson(url).get("response").get("venue").get("hereNow");
-			hereNow.put("count", details.get("count"));
-			hereNow.put("people", Json.list());
-			Json people = Json.list();
+			
 			for (Json json : details.get("groups")) {
 				String type = json.get("type").str();
 				Json items = json.get("items");
 				if(items.isEmpty() || items.isNull()) continue;
 				for(Json json2 : items){
- 					Json item = json.map();
-					item.put("type", type);
-					item.put("firstName", json2.get("user").get("firstName")); 
-					item.put("lastName", json2.get("user").get("lastName"));
-					item.put("photo", json2.get("user").get("photo")); 
-					String uid=json2.get("user").get("id").str();
-					Json contactInfo = queryByUserId(uid, token);
-					item.put("id", uid);
-					item.put("contact", contactInfo);
-					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
-					Json services = Json.map();
-					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
-					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
-						services = tempServices;
+					String uid = json2.get("user").get("id").str();
+					User user = User.all().filter("fourSquareId", uid).get();
+					if (user == null) { 
+						Json item = json.map();
+						item.put("type", type);
+						item.put("firstName", json2.get("user").get("firstName")); 
+						item.put("lastName", json2.get("user").get("lastName"));
+						item.put("photo", json2.get("user").get("photo")); 
+
+						Json contactInfo = queryByUserId(uid, token);
+						item.put("id", uid);
+						item.put("contact", contactInfo);
+						item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
+						Json services = Json.map();
+						Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
+						if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
+							services = tempServices;
+						}
+						if (contactInfo.containsKey("facebook") && !services.containsKey("facebook")) {
+							services.put("facebook", Json.map().put("url", "http://www.facebook.com/" + contactInfo.get("facebook").str()).put("username", contactInfo.get("facebook").str()));
+						}
+						if (contactInfo.containsKey("twitter") && !services.containsKey("twitter")) {
+							services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
+						}
+						if (!services.containsKey("foursquare")) {
+							services.put("foursquare", Json.map().put("url", "https://foursquare.com/" + uid).put("username", uid));
+						}
+						item.put("services", services);
+						user = User.createUserFromItem(item);
+						user.insert();
+						
 					}
-					if (contactInfo.containsKey("facebook") && !services.containsKey("facebook")) {
-						services.put("facebook", Json.map().put("url", "http://www.facebook.com/" + contactInfo.get("facebook").str()).put("username", contactInfo.get("facebook").str()));
-					}
-					if (contactInfo.containsKey("twitter") && !services.containsKey("twitter")) {
-						services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
-					}
-					if (!services.containsKey("foursquare")) {
-						services.put("foursquare", Json.map().put("url", "https://foursquare.com/" + uid).put("username", uid));
-					}
-					item.put("services", services);
 					
-					people.add(item);
+					people.add(user);
 				}
 			}
-			hereNow.put("people", people);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return hereNow;
+		return people;
 	}
 	
 }

@@ -1,5 +1,9 @@
 package controllers;
 
+import java.util.List;
+
+import models.User;
+
 import play.Logger;
 import play.mvc.Controller;
 import siena.Json;
@@ -9,6 +13,7 @@ public class Application extends Controller {
 
     public static void index() {
     	session.clear();
+    	renderArgs.put("index", true);
         render();
     }
 
@@ -36,13 +41,13 @@ public class Application extends Controller {
 		Application.renderVenues();
 	}
 	
-	public static void showUser() {
-		render("application/user-view.html");
+	public static void showUser(String id) {
+		User user = User.all().filter("id", id).get();
+		render("application/user-view.html", user);
 	}
     
     public static void renderUsers(String venueId) {
-    	Logger.info("v->" + venueId);
-    	Json peopleHere = BigBrotherHelper.queryVenue(venueId, session.get("token"));
+    	List<User> peopleHere = BigBrotherHelper.queryVenue(venueId, session.get("token"));
     	render("application/people-list.html", peopleHere);
     }
     

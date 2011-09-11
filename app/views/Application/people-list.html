@@ -10,16 +10,16 @@
 <div class="content-primary">
 	*{FRIENDS}*
 	<ul data-role="listview">
-		#{list items:peopleHere.people, as:'person'}
+		#{list items:peopleHere, as:'person'}
 		<li>
-			<a href="index.html" data-transition="slide">
+			<a href="@@{Application.showUser(person.id)}" data-transition="slide">
 				<div class="row">
 					<div class="user-pic fleft">
-						<img src="${person.photo.str()}" width="40px">
+						<img src="${person.photoUrl}" width="40px">
 					</div>
 					<div class="user-bio fleft">
-						<h3>${person.firstName.str()} ${person.lastName.str()}</h3>
-						<p>${person.bio.str()}</p>
+						<h3>${person.firstName} ${person.lastName}</h3>
+						<p>${person.bio}</p>
 						<div>
 							#{list items:person.services.keys(), as:'service'}
 								<img src="${request.getBase()}/public/images/logos/${service}.png" alt="${service}" height="20px" width="20px">

@@ -1,34 +1,35 @@
 #{extends 'main.html' /}
-#{set title:'Places' /}
 
 
 <div class="text-centered" data-role="header">
-	<a href="index.html" data-role="button" data-theme="a" data-icon="back" data-transition="slide">People</a>
+	<a data-theme="a" data-direction="reverse" data-rel="back" data-icon="back">People</a>
 	<img src="@{'/public/images/logo.png'}" height="40px" width="100px">
 </div>
 <div data-role="header" data-theme="d">
-	<h1>User Name</h1>
+	<h1>${user.firstName} ${user.lastName}</h1>
 </div>
 <div class="content-primary">
 	<div class="row padding10">
 		<div class="user-30 fleft">
-			<img src="" alt="" width="80px" height="80px">
+			<img src="${user.photoUrl}" alt="" width="80px" height="80px">
 		</div>
 		<div class="user-70 fleft">
-			<div>Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto es una bio. Esto e.</div>
-			*{Si no tiene bio
+			#{if user.bio}
+			<div> ${user.bio}</div>
+			#{/if}
+			#{else}
 			<div>
-				<strong>Name User</strong>
+				<strong>${user.firstName} ${user.lastName}</strong>
 			<div>
 			<div class="mtop10">
-				<a href=""><img src="@{'/public/images/logos/twitter.png'}" alt="" height="30px" width="30px"></a>
-				<a href=""><img src="@{'/public/images/logos/linkedin.png'}" alt="" height="30px" width="30px"></a>
-				<a href=""><img src="@{'/public/images/logos/facebook.png'}" alt="" height="30px" width="30px"></a>
+			#{list items:user.services.keys(), as:'service'}
+				<a href="${user.services.get(service).url.str()}"><img src="${request.getBase()}/public/images/logos/${service}.png" alt="${service}" height="30px" width="30px"></a>
+			#{/list}
 			</div>
-			}*
+			#{/else}
 		</div>
 	</div>
-	<div class="row padding10">
+	*{<div class="row padding10">
 		<div>
 			<span class="tag">co-founder</span>
 			<span class="tag">angelList</span>
@@ -39,15 +40,12 @@
 			<span class="tag">co-founder</span>
 			<span class="tag">co-founder</span>
 		</div>
-	</div>
-	*{Si no tiene bio, no deben salir aquí}*
+	</div>}*
+	#{if user.bio}
 	<div class="row padding10">
-		<a href=""><img src="@{'/public/images/logos/twitter.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/klout.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/facebook.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/linkedin.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/github.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/foursquare.png'}" alt="" height="30px" width="30px"></a>
-		<a href=""><img src="@{'/public/images/logos/quora.png'}" alt="" height="30px" width="30px"></a>
+		#{list items:user.services.keys(), as:'service'}
+			<a href="${user.services.get(service).url.str()}"><img src="${request.getBase()}/public/images/logos/${service}.png" alt="${service}" height="30px" width="30px"></a>
+		#{/list}
 	</div>
+	#{/if}
 </div>

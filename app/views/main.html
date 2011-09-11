@@ -14,7 +14,7 @@
 		
         #{get 'moreScripts' /}
     </head>
-    <body>
+    <body #{if index}class="body-index"#{/if}>
         #{doLayout /}
     </body>
 </html>
