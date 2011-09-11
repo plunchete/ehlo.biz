@@ -1,23 +1,27 @@
 #{extends 'main.html' /}
 #{set title:'Places' /}
 
-<div class="text-centered" data-role="header" data-position="fixed">
-	<img src="@{'/public/images/logo.png'}" height="40px" width="150px">
+<div class="text-centered" data-role="header">
+	<img src="@{'/public/images/logo.png'}" height="40px" width="100px">
 </div>
-<div data-role="header" data-theme="d" data-position="fixed">
+<div data-role="header" data-theme="d">
 	<h1>Places</h1>
 </div>
 <div class="content-primary">	
 	<ul data-role="listview">
 		#{list items:venues, as:'venue'}
 		<li>
-			<a href="index.html"> 
-				<img src="${venue.image.str()}" title="category-name" height="80px" width="80px" /> 
-				<h3>${venue.name.str()}</h3> 
-				#{if venue.adress}
-				<p>${venue.address.str()}</p> 
-				#{/if}
-				<p class="link">${venue.count.asInt()} #{if venue.count.asInt() == 1}person#{/if}#{else}people#{/else} here</p>
+			<a href="@@{Application.renderUsers(venue.id.str())}"> 
+				<div class="user-pic fleft">
+					<img src="${venue.image.str()}" title="category-name" /> 
+				</div>
+				<div  class="user-bio fleft">
+					<h3>${venue.name.str()}</h3> 
+					#{if venue.adress}
+					<p>${venue.address.str()}</p> 
+					#{/if}
+					<p class="link">${venue.count.asInt()} #{if venue.count.asInt() == 1}person#{/if}#{else}people#{/else} here</p>
+				</div>	
 			</a>
 		</li>
 		#{/list}

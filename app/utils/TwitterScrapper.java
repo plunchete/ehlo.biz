@@ -6,14 +6,17 @@ import java.util.HashMap;
 import org.htmlcleaner.TagNode;
 import org.htmlcleaner.XPatherException;
 
+import play.Logger;
+
 import siena.Json;
 
 public class TwitterScrapper {
 	private static String BASE_URL="http://twitter.com/";
 	
 	public static String getTwitterInfo(Json userContacts){
+		Logger.info("userContacts " + userContacts);
 		String bio="";
-		if(userContacts!=null &&!userContacts.isNull() && !userContacts.isEmpty() && userContacts.contains("twitter")){
+		if(userContacts != null &&!userContacts.isNull() && !userContacts.isEmpty() && userContacts.containsKey("twitter")){
 			String twitter = userContacts.get("twitter").str();
 			bio = getUserBio(twitter);
 		}
