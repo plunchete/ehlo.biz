@@ -6,7 +6,7 @@ import play.mvc.Router;
 import siena.Json;
 import controllers.Constants;
 
-public class FourSquareHelper {
+public class BigBrotherHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
@@ -95,11 +95,11 @@ public class FourSquareHelper {
 		
 		try {
 			Json details = URLHelper.fetchJson(url).get("response").get("venue").get("hereNow");
-			Logger.info("details Json " + URLHelper.fetchJson(url));
 			hereNow.put("count", details.get("count"));
 			hereNow.put("people", Json.list());
 			Json people = Json.list();
 			for(Json json : details.get("groups")){
+				Logger.info("here");
 				String type = json.get("type").str();
 				Json items = json.get("items");
 				if(items.isEmpty() || items.isNull()) continue;
@@ -110,9 +110,23 @@ public class FourSquareHelper {
 					item.put("lastName", json2.get("user").get("lastName"));
 					item.put("photo", json2.get("user").get("photo")); 
 					String uid=json2.get("user").get("id").str();
+					Json contactInfo = queryByUserId(uid, token);
 					item.put("id", uid);
-					item.put("contact", queryByUserId(uid, token));
+					item.put("contact", contactInfo);
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
+					Json services = Json.map();
+					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
+					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
+						services = tempServices;
+					}
+					if (contactInfo.containsKey("facebook") && !services.containsKey("facebook")) {
+						services.put("facebook", Json.map().put("url", "http://www.facebook.com/" + contactInfo.get("facebook").str()).put("username", contactInfo.get("facebook").str()));
+					}
+					if (contactInfo.containsKey("twitter") && !services.containsKey("twitter")) {
+						services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
+					}
+					item.put("services", services);
+					
 					people.add(item);
 				}
 			}

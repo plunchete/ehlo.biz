@@ -1,7 +1,7 @@
 #{extends 'main.html' /}
 #{set title:'Who is here' /}
 <div class="text-centered" data-role="header" data-position="fixed">
-	<a href="index.html" data-role="button" data-theme="a" data-icon="back" data-transition="slide">Places</a>
+	<a data-theme="a" data-direction="reverse" data-rel="back">Places</a>
 	<img src="@{'/public/images/logo.png'}" height="40px" width="100px">
 </div>
 <div data-role="header" data-theme="d" data-position="fixed">
@@ -21,14 +21,14 @@
 						<h3>${person.firstName.str()} ${person.lastName.str()}</h3>
 						<p>${person.bio.str()}</p>
 						<div>
-							<img src="@{'/public/images/logos/twitter.png'}" alt="" height="20px" width="20px">
-							<img src="@{'/public/images/logos/linkedin.png'}" alt="" height="20px" width="20px">
-							<img src="@{'/public/images/logos/facebook.png'}" alt="" height="20px" width="20px">
+							#{list items:person.services.keys(), as:'service'}
+								<img src="${request.getBase()}/public/images/logos/${service}.png" alt="${service}" height="20px" width="20px">
+							#{/list}
 						</div>
-						<div>
+						*{<div>
 							<span class="tag">co-founder</span>
 							<span class="tag">co-founder</span>
-						</div>
+						</div>}*
 					</div>
 				</div>
 			</a>
