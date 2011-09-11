@@ -17,7 +17,7 @@
 				</div>
 				<div  class="user-bio fleft">
 					<h3>${venue.name.str()}</h3> 
-					#{if venue.adress}
+					#{if venue.address && !venue.address.isNull()}
 					<p>${venue.address.str()}</p> 
 					#{/if}
 					<p class="link">${venue.count.asInt()} #{if venue.count.asInt() == 1}person#{/if}#{else}people#{/else} here</p>
