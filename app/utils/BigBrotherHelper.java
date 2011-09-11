@@ -114,6 +114,7 @@ public class BigBrotherHelper {
 					item.put("id", uid);
 					item.put("contact", contactInfo);
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
+					item.put("tags", getTags(item.get("bio")));
 					Json services = Json.map();
 					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
 					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
@@ -135,6 +136,20 @@ public class BigBrotherHelper {
 			e.printStackTrace();
 		}
 		return hereNow;
+	}
+	
+	private static Json getTags(Json bio){
+		Json tags = Json.list();
+		if ( bio == null || bio.isNull() || bio.isEmpty()) return tags;
+		String sBio = " "+bio.str().replaceAll(",", " ").toLowerCase()+" ";
+		for( String tag : Constants.tags){
+			if(sBio.contains(tag)){
+				tags.add(tag);
+				sBio = sBio.replaceAll(tag, "");
+			}
+		}
+		System.out.println(tags);
+		return tags;
 	}
 	
 }
