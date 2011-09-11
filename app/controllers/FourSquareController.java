@@ -19,15 +19,30 @@ public class FourSquareController extends Controller {
 		return null;
 	}
 	
-	private static void processEndPointSearchJson(Json raw){
+	public static Json getVenues(String coordinates){
+		Json rawVenues = consume4SQCoordinates(coordinates);
+		Json venues = processEndPointSearchJson(rawVenues);
+		return venues;
+	}
+
+	private static Json processEndPointSearchJson(Json raw){
 		Json venues = raw.get("response").get("venues");
+		Json processedVenues = Json.list();
 		for (Json json : venues) {
-			
+			Json processedVenue = Json.map();
+			processedVenue.put("id", json.get("id"))
+							.put("name", json.get("name"))
+							.put("address", json.get("location").get("address"))
+							.put("categories", json.get("categories").get("parents"))
+							.put("image", json.get("categories").get("icon"))
+							.put("count", json.get("hereNow").get("count"));
+			processedVenues.add(processedVenue);
 		}
+		return processedVenues;
 	}
 	
-	public static Json consume4SQCoordinates(String ll){
-		String url = END_POINTS_URL+Constants.API_TOKEN_4SQ+"&ll="+ll;
+	private static Json consume4SQCoordinates(String coordinates){
+		String url = END_POINTS_URL+Constants.API_TOKEN_4SQ+"&ll="+coordinates;
 		try {
 			Json results=URLHelper.fetchJson(url);
 			return(results);
@@ -45,15 +60,6 @@ public class FourSquareController extends Controller {
 		//4square login
 		}
 	
-	public static Json getPlacesNearBy(String latitude, String longitue){
-		//concourse exhibition centre for testing purposes
-		//2237.7718939
-		//-122.4039808
-		
-		
-		return null;
-	}
-	
 	private static String retrieveToken(String code){
 		String uriCB = Router.getFullUrl("controllers.Application.index");
 		String url = "https://foursquare.com/oauth2/access_token"
@@ -66,7 +72,6 @@ public class FourSquareController extends Controller {
 			Json token = URLHelper.fetchJson(url);
 			return token.get("access_token").str();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -78,9 +83,4 @@ public class FourSquareController extends Controller {
 											"&response_type=code&redirect_uri="+redirect;	
 		throw new Redirect(url);
 	}
-	
-//	public static void main(String[] args) {
-//		Constants.API_TOKEN_4SQ="1IKLWBG4MSEQBUZCKT2OFR4J5ZDFVW12SHVH0WBE3IW1T1NP";
-//		consume4SQCoordinates("37.7718939,-122.4039808");
-//	}
 }
