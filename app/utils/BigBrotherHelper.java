@@ -128,7 +128,7 @@ public class BigBrotherHelper {
 							services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
 						}
 						if (!services.containsKey("foursquare")) {
-							services.put("foursquare", Json.map().put("url", "https://foursquare.com/" + uid).put("username", uid));
+							services.put("foursquare", Json.map().put("url", "https://foursquare.com/user/" + uid).put("username", uid));
 						}
 						item.put("services", services);
 						user = User.createUserFromItem(item);
