@@ -31,9 +31,7 @@ public class TwitterScrapper {
 			TagNode bioTag = (TagNode)tags[0];
 			String bio = bioTag.getText().toString();
 			return bio;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (XPatherException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

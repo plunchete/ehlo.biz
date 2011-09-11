@@ -1,10 +1,14 @@
 package utils;
 
-import play.Logger;
+import java.util.Arrays;
+import java.util.List;
+
 import siena.Json;
 
 public class QwerlyHelper {
 
+	public static final List<String> supportedServices = Arrays.asList("facebook", "twitter", "github", "klout", "linkedin", "twitter", "quora");
+	
 	public static Json getUserServices(Json json) {
 		String twitterId = (json.containsKey("twitter"))? json.get("twitter").str():"";
 		String facebookId = (json.containsKey("facebook"))? json.get("facebook").str():"";
@@ -13,16 +17,15 @@ public class QwerlyHelper {
 		if(!twitterId.isEmpty()){
 			try {
 				Json info = URLHelper.fetchJson(twitterUrl(twitterId));
-				Logger.info("twitter " + twitterId);
-				Logger.info("url " + twitterUrl(twitterId));
-				Logger.info("twitter info " + info);
 				String status = info.get("status").str();
 				if ("200".equals(status)){
 					Json services = info.get("profile").get("services");
 					for (Json json2 : services) {
 						String keyService = json2.get("type").str();
-						allServices.put(keyService, 
+						if (supportedServices.contains(keyService)) {
+							allServices.put(keyService, 
 									Json.map().put("url", json2.get("url")).put("username", json2.get("username")));
+						}
 					}
 					
 				}
@@ -34,15 +37,15 @@ public class QwerlyHelper {
 		if(!facebookId.isEmpty()){
 			try {
 				Json info = URLHelper.fetchJson(facebookUrl(facebookId));
-				Logger.info("facebook " + facebookId);
-				Logger.info("facebook info " + info);
 				String status = info.get("status").str();
 				if ("200".equals(status)){
 					Json services = info.get("profile").get("services");
 					for (Json json2 : services) {
 						String keyService = json2.get("type").str();
-						allServices.put(keyService, 
+						if (supportedServices.contains(keyService)) {
+							allServices.put(keyService, 
 									Json.map().put("url", json2.get("url")).put("username", json2.get("username")));
+						}
 					}
 					
 				}
