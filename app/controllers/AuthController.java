@@ -1,6 +1,5 @@
 package controllers;
 
-import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
 
