@@ -33,5 +33,9 @@ public class Application extends Controller {
 		session.put("token", token);
 		Application.renderVenues();
 	}
+	
+	public static void showUser() {
+		render("application/user-view.html");
+	}
     
 }

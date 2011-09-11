@@ -20,6 +20,11 @@
 .mtopm10{
 	margin-top:-10px;
 }
+.padding10{
+	padding-top:10px;
+	padding-right:10px;
+	padding-left:10px;
+}
 
 .user-pic{
 	width:20%;
@@ -29,6 +34,12 @@
 }
 .user-bio h3{
 	margin-top: 0px;
+}
+.user-30{
+	width:30%;
+}
+.user-70{
+	width:70%;
 }
 .row {
   zoom: 1;
@@ -41,12 +52,14 @@
   content: ".";
 }
 .tag{
-	font-size:80%;
+	font-size:90%;
 	font-weight:normal;
 	background-color:#ccc;
 	border-bottom:1px solid #808080;
 	border-right:2px solid #808080;
-	padding:2px;
+	padding:3px;
+	margin-bottom:5px;
+	display: inline-block;
 }
 
 .main-logo {
@@ -56,3 +69,5 @@
 	margin-top: -30px;
 	margin-left: -125px;
 }
+
+
