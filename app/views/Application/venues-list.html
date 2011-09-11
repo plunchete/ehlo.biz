@@ -12,7 +12,7 @@
 		#{list items:venues, as:'venue'}
 		<li>
 			<a href="index.html"> 
-				<img src="${venue.image.str()}" title="category-name" height="80px" width="80px" /> 
+				<img src="${venue.image.str()}" title="category-name" /> 
 				<h3>${venue.name.str()}</h3> 
 				#{if venue.adress}
 				<p>${venue.address.str()}</p> 

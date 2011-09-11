@@ -43,8 +43,9 @@ public class FourSquareHelper {
 	}
 	
 	public static Json consume4SQCoordinates(String coordinates, String token){
-		String url = END_POINTS_URL + token + "&ll="+coordinates;
+		String url = END_POINTS_URL + token + "&ll="+coordinates + "&v=20110910";
 		try {
+			Logger.info("url " + url);
 			Json results=URLHelper.fetchJson(url);
 			return(results);
 		} catch (Exception e) {
