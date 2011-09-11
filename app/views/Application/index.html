@@ -4,7 +4,7 @@
 	<div class="text-centered">
 		<img src="@{'/public/images/logo.png'}"/>
 	</div>
-	<a href="#" id="login" data-role="button" data-ajax="false" data-theme="b">Login with Foursquare!</a>
+	<a href="@@{Application.doLogin()}" id="login" data-role="button" data-ajax="false" data-theme="b">Login with Foursquare!</a>
 </div>
 
 #{set 'moreScripts'}
