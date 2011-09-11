@@ -10,7 +10,7 @@ public class BigBrotherHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
-	private static String USER_DETAILS= " https://foursquare.com/users/";
+	private static String USER_DETAILS= " https://api.foursquare.com/v2/users/";
 	private static String VENUE_DETAILS= "https://api.foursquare.com/v2/venues/";
 
 	
@@ -43,8 +43,9 @@ public class BigBrotherHelper {
 	}
 	
 	public static Json consume4SQCoordinates(String coordinates, String token){
-		String url = END_POINTS_URL + token + "&ll="+coordinates;
+		String url = END_POINTS_URL + token + "&ll="+coordinates + "&v=20110910";
 		try {
+			Logger.info("url " + url);
 			Json results=URLHelper.fetchJson(url);
 			return(results);
 		} catch (Exception e) {
@@ -84,18 +85,21 @@ public class BigBrotherHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return data;
 	}
 	
 	public static Json queryVenue(String venueId, String token) {
-		String url = VENUE_DETAILS+venueId+"?oauth_token" + token;
+		String url = VENUE_DETAILS+venueId+"?oauth_token=" + token;
 		Json hereNow = Json.map();
+		
 		try {
-			Json details = URLHelper.fetchJson(url).get("hereNow");
+			Json details = URLHelper.fetchJson(url).get("response").get("venue").get("hereNow");
 			hereNow.put("count", details.get("count"));
 			hereNow.put("people", Json.list());
 			Json people = Json.list();
 			for(Json json : details.get("groups")){
+				Logger.info("here");
 				String type = json.get("type").str();
 				Json items = json.get("items");
 				if(items.isEmpty() || items.isNull()) continue;
@@ -106,13 +110,20 @@ public class BigBrotherHelper {
 					item.put("lastName", json2.get("user").get("lastName"));
 					item.put("photo", json2.get("user").get("photo")); 
 					String uid=json2.get("user").get("id").str();
+					Json contactInfo = queryByUserId(uid, token);
 					item.put("id", uid);
-					item.put("contact", queryByUserId(uid, token));
+					item.put("contact", contactInfo);
 					item.put("bio", TwitterScrapper.getTwitterInfo(item.get("contact")));
 					Json services = Json.map();
 					Json tempServices = QwerlyHelper.getUserServices(item.get("contact"));
 					if(tempServices != null && !tempServices.isNull() && !tempServices.isEmpty()){
 						services = tempServices;
+					}
+					if (contactInfo.containsKey("facebook") && !services.containsKey("facebook")) {
+						services.put("facebook", Json.map().put("url", "http://www.facebook.com/" + contactInfo.get("facebook").str()).put("username", contactInfo.get("facebook").str()));
+					}
+					if (contactInfo.containsKey("twitter") && !services.containsKey("twitter")) {
+						services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
 					}
 					item.put("services", services);
 					
@@ -123,7 +134,6 @@ public class BigBrotherHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return hereNow;
 	}
 	

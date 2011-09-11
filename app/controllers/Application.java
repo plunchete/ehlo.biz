@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Logger;
 import play.mvc.Controller;
 import siena.Json;
 import utils.BigBrotherHelper;
@@ -7,6 +8,7 @@ import utils.BigBrotherHelper;
 public class Application extends Controller {
 
     public static void index() {
+    	session.clear();
         render();
     }
 
@@ -37,5 +39,11 @@ public class Application extends Controller {
 	public static void showUser() {
 		render("application/user-view.html");
 	}
+    
+    public static void renderUsers(String venueId) {
+    	Logger.info("v->" + venueId);
+    	Json peopleHere = BigBrotherHelper.queryVenue(venueId, session.get("token"));
+    	render("application/people-list.html", peopleHere);
+    }
     
 }
