@@ -1,8 +1,27 @@
 #{extends 'main.html' /}
-#{set title:'Home' /}
+#{set title:'Who is here' /}
 
-<div data-role="header" data-position="fixed">
-	<h1>Fixed toolbars</h1>
+<div class="text-centered" data-role="header" data-position="fixed">
+	<img src="@{'/public/images/logo.png'}" height="40px" width="150px">
+</div>
+<div data-role="header" data-theme="d" data-position="fixed">
+	<h1>Who is here</h1>
+</div>
+<div class="content-primary">
+	<div class="content-primary">	
+			<ul data-role="listview"> 
+				<li> 
+					<img src="" alt="" width="80xp" height="80px" /> 
+					<h3>Nombre Apellido</h3> 
+					<div>Breve descripción sobre esta persona que la cogemos de twitter por lo tanto tiene caracteres limitados.</div>
+					*{<div class="mtop10">
+						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
+						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
+					</div>
+					}*
+				</li>
+			</ul>
+	</div><!--/content-primary -->
 </div>
 
 #{set 'moreScripts'}

@@ -1,0 +1,15 @@
+.text-centered{
+	text-align:center;
+}
+.link{
+	color:#0066cc;
+	text-decoration:none;
+	font-weight:bold;
+}
+.fleft{
+	float:lef;
+}
+
+.mtop10{
+	margin-top:10px;
+}
