@@ -37,7 +37,6 @@ public class Application extends Controller {
     }
     
     public static void callBack4SQAuth(){
-    	Logger.info(params.allSimple().toString());
 		String code = params.get("code");
 		String token = BigBrotherHelper.retrieveToken(code);
 		session.put("token", token);
