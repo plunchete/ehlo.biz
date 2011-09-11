@@ -3,6 +3,8 @@ package models;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.Logger;
+
 import controllers.Constants;
 import siena.Column;
 import siena.Generator;
@@ -59,7 +61,7 @@ public class User extends Model {
 		List<String> tags = new ArrayList<String>();
 		if ( bio == null || bio.isEmpty()) return tags;
 		
-		String sBio = " " + bio.replaceAll(",", " ").replaceAll(".", " ").toLowerCase()+" ";
+		String sBio = " " + bio.replaceAll(",", " ").replace('.', ' ').toLowerCase()+" ";
 		for( String tag : Constants.tags){
 			if(sBio.contains(tag)){
 				tags.add(tag);
