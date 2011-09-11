@@ -1,42 +1,22 @@
 #{extends 'main.html' /}
 #{set title:'Who is here' /}
-
-<div class="text-centered" data-role="header" data-position="fixed">
-	<img src="@{'/public/images/logo.png'}" height="40px" width="150px">
-</div>
-<div data-role="header" data-theme="d" data-position="fixed">
-	<h1>Who is here</h1>
-</div>
-<div class="content-primary">
-	<div class="content-primary">	
-			<ul data-role="listview"> 
-				<li> 
-					<img src="" alt="" width="80xp" height="80px" /> 
-					<h3>Nombre Apellido</h3> 
-					<div>Breve descripción sobre esta persona que la cogemos de twitter por lo tanto tiene caracteres limitados.</div>
-					*{<div class="mtop10">
-						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
-						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
-					</div>
-					}*
-				</li>
-			</ul>
-	</div><!--/content-primary -->
+<div class="content-primary main-logo">
+	<div class="text-centered">
+		<img src="@{'/public/images/logo.png'}" />
+	</div>
+	<a href="#" id="login" data-role="button" data-ajax="false">Login with foursquare!</a>
 </div>
 
 #{set 'moreScripts'}
 <script type="text/javascript" charset="utf-8">
-
-$(document).ready(function() {
-	navigator.geolocation.getCurrentPosition(showMap);
-});
-
+var latitude = 0;
+var longitude = 0;
+navigator.geolocation.getCurrentPosition(showMap);
 
 function showMap(position) {
-	console.log(position);
-	console.log(position.coords);
-	console.log(position.coords.latitude);
-	console.log(position.coords.longitude);
+	latitude = position.coords.latitude;
+	longitude = position.coords.longitude;
+	$('#login').attr('href', '@@{Application.doLogin()}'+ '?latitude=' + latitude + '&longitude=' + longitude);
 }
 </script>
 #{/set}

@@ -21,10 +21,10 @@ public class FourSquareController extends Controller {
 		System.out.println(token);
 		Application.index();
 		//4square login
-		}
+	}
 	
 	public static void austh4SQ(){
-		String redirect = Router.getFullUrl("controllers.Listener.callBack4SQAuth");
+		String redirect = Router.getFullUrl("Application.callBack4SQAuth");
 		String url = "https://foursquare.com/oauth2/authenticate?client_id="+CLIENT_ID+
 											"&response_type=code&redirect_uri="+redirect;	
 		throw new Redirect(url);
