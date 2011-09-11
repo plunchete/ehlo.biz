@@ -2,7 +2,7 @@ package controllers;
 
 import play.mvc.Controller;
 import siena.Json;
-import utils.FourSquareHelper;
+import utils.BigBrotherHelper;
 
 public class Application extends Controller {
 
@@ -23,13 +23,13 @@ public class Application extends Controller {
     
     public static void renderVenues() {
     	String coordinates = session.get("latitude") + "," + session.get("longitude");
-    	Json venues = FourSquareHelper.getVenues(coordinates, session.get("token"));
+    	Json venues = BigBrotherHelper.getVenues(coordinates, session.get("token"));
     	render("application/venues-list.html", venues);
     }
     
     public static void callBack4SQAuth(){
 		String code = params.get("code");
-		String token = FourSquareHelper.retrieveToken(code);
+		String token = BigBrotherHelper.retrieveToken(code);
 		session.put("token", token);
 		Application.renderVenues();
 	}
