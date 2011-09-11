@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Logger;
 import play.mvc.Controller;
 import siena.Json;
 import utils.FourSquareHelper;
@@ -34,5 +35,11 @@ public class Application extends Controller {
 		session.put("token", token);
 		Application.renderVenues();
 	}
+    
+    public static void renderUsers(String venueId) {
+    	Logger.info("v->" + venueId);
+    	Json peopleHere = FourSquareHelper.queryVenue(venueId, session.get("token"));
+    	render("application/people-list.html", peopleHere);
+    }
     
 }

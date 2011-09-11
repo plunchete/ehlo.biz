@@ -10,7 +10,7 @@ public class FourSquareHelper {
 	private static String CLIENT_ID="3HEIFZIGIX0WUJCJWPDZP1QPGQUIVVIOLNZ4ASRBYCUO3XN4";
 	private static String CLIENT_SECRET="UZ5ATEJSTJNPK2LKV0ZY11XHFV45YWYJKUHRFKGLUCX4ID4O";
 	private static String END_POINTS_URL="https://api.foursquare.com/v2/venues/search?v=20110910&oauth_token=";
-	private static String USER_DETAILS= " https://foursquare.com/users/";
+	private static String USER_DETAILS= " https://api.foursquare.com/v2/users/";
 	private static String VENUE_DETAILS= "https://api.foursquare.com/v2/venues/";
 
 	
@@ -85,14 +85,17 @@ public class FourSquareHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return data;
 	}
 	
 	public static Json queryVenue(String venueId, String token) {
-		String url = VENUE_DETAILS+venueId+"?oauth_token" + token;
+		String url = VENUE_DETAILS+venueId+"?oauth_token=" + token;
 		Json hereNow = Json.map();
+		
 		try {
-			Json details = URLHelper.fetchJson(url).get("hereNow");
+			Json details = URLHelper.fetchJson(url).get("response").get("venue").get("hereNow");
+			Logger.info("details Json " + URLHelper.fetchJson(url));
 			hereNow.put("count", details.get("count"));
 			hereNow.put("people", Json.list());
 			Json people = Json.list();
@@ -117,7 +120,6 @@ public class FourSquareHelper {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return hereNow;
 	}
 	
