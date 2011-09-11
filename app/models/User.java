@@ -59,7 +59,7 @@ public class User extends Model {
 		List<String> tags = new ArrayList<String>();
 		if ( bio == null || bio.isEmpty()) return tags;
 		
-		String sBio = " " + bio.replaceAll(",", " ").toLowerCase()+" ";
+		String sBio = " " + bio.replaceAll(",", " ").replaceAll(".", " ").toLowerCase()+" ";
 		for( String tag : Constants.tags){
 			if(sBio.contains(tag)){
 				tags.add(tag);
