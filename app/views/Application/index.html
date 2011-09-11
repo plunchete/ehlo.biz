@@ -2,27 +2,65 @@
 #{set title:'Who is here' /}
 
 <div class="text-centered" data-role="header" data-position="fixed">
-	<img src="@{'/public/images/logo.png'}" height="40px" width="150px">
+	<a href="index.html" data-role="button" data-theme="a" data-icon="back" data-transition="slide">Places</a>
+	<img src="@{'/public/images/logo.png'}" height="40px" width="100px">
 </div>
 <div data-role="header" data-theme="d" data-position="fixed">
 	<h1>Who is here</h1>
 </div>
 <div class="content-primary">
-	<div class="content-primary">	
-			<ul data-role="listview"> 
-				<li> 
-					<img src="" alt="" width="80xp" height="80px" /> 
-					<h3>Nombre Apellido</h3> 
-					<div>Breve descripción sobre esta persona que la cogemos de twitter por lo tanto tiene caracteres limitados.</div>
-					*{<div class="mtop10">
-						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
-						<a class="fleft" href=""><img src="" alt="" width="20px" height="20px"></a>
+	*{FRIENDS}*
+	<ul data-role="listview">
+		<li data-role="list-divider">Friends</li>
+		<li>
+			<a href="index.html" data-transition="slide">
+					<div class="row">
+						<div class="user-pic fleft">
+							<img src="@{'/public/images/categories/foo.png'}">
+						</div>
+						<div class="user-bio fleft"> 
+							<h3>Nombre Apellido</h3>
+							<p>Entrepreneur, geek, developer. co-founder of masterbranch.com and debugmodeon.com. https://www.masterbranch.com</p>
+							<div>
+								<img src="@{'/public/images/logos/twitter.png'}" alt="" height="20px" width="20px">
+								<img src="@{'/public/images/logos/linkedin.png'}" alt="" height="20px" width="20px">
+								<img src="@{'/public/images/logos/facebook.png'}" alt="" height="20px" width="20px">
+							</div>
+							<div>
+								<span class="tag">co-founder</span>
+								<span class="tag">co-founder</span>
+							</div>
+						</div>
 					</div>
-					}*
-				</li>
-			</ul>
-	</div><!--/content-primary -->
-</div>
+			</a>
+		</li>
+	
+	*{OTHERS}*
+		<li data-role="list-divider">Others</li>
+		<li>
+			<a href="index.html" data-transition="slide">
+					<div class="row">
+						<div class="user-pic fleft">
+							<img src="@{'/public/images/categories/foo.png'}">
+						</div>
+						<div class="user-bio fleft"> 
+							<h3>Nombre Apellido</h3>
+							<p>Entrepreneur, geek, developer. co-founder of masterbranch.com and debugmodeon.com. https://www.masterbranch.com</p>
+							<div>
+								<img src="@{'/public/images/logos/twitter.png'}" alt="" height="20px" width="20px">
+								<img src="@{'/public/images/logos/linkedin.png'}" alt="" height="20px" width="20px">
+								<img src="@{'/public/images/logos/facebook.png'}" alt="" height="20px" width="20px">
+							</div>
+							<div>
+								<span class="tag">angelList</span>
+								<span class="tag">VC</span>
+							</div>
+						</div>
+					</div>
+			</a>
+		</li>
+	</ul>
+</div><!--/content-primary -->
 
 #{set 'moreScripts'}
 <script type="text/javascript" charset="utf-8">
