@@ -18,6 +18,7 @@ public class Application extends Controller {
     }
 
     public static void doLogin(String latitude, String longitude) {
+    	Logger.info("latitude " + latitude +". longitude " + longitude);
     	if (latitude == null || latitude.isEmpty()) {
     		latitude = "37.7712498";
     	}
@@ -32,8 +33,10 @@ public class Application extends Controller {
     
     public static void renderVenues() {
     	String coordinates = session.get("latitude") + "," + session.get("longitude");
+    	Logger.info(coordinates);
     	Json venues = BigBrotherHelper.getVenues(coordinates, session.get("token"));
-    	render("application/venues-list.html", venues);
+    	renderArgs.put("venues", venues);
+    	render("Application/venues-list.html");
     }
     
     public static void callBack4SQAuth(){
@@ -45,12 +48,14 @@ public class Application extends Controller {
 	
 	public static void showUser(String id) {
 		User user = User.all().filter("id", id).get();
-		render("application/user-view.html", user);
+		renderArgs.put("user", user);
+		render("Application/user-view.html");
 	}
     
     public static void renderUsers(String venueId) {
     	List<User> peopleHere = BigBrotherHelper.queryVenue(venueId, session.get("token"));
-    	render("application/people-list.html", peopleHere);
+    	renderArgs.put("peopleHere", peopleHere);
+    	render("Application/people-list.html");
     }
     
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import models.User;
+import play.Logger;
 import play.mvc.Router;
 import siena.Json;
 import controllers.Constants;
@@ -38,8 +39,8 @@ public class BigBrotherHelper {
 			} else {
 				processedVenue.put("image", "https://foursquare.com/img/categories/building/default.png");
 			}
-			
-			processedVenues.add(processedVenue);
+			if (processedVenue.get("count").asInt() > 0)
+				processedVenues.add(processedVenue);
 		}
 		return processedVenues;
 	}
@@ -101,8 +102,11 @@ public class BigBrotherHelper {
 				if(items.isEmpty() || items.isNull()) continue;
 				for(Json json2 : items){
 					String uid = json2.get("user").get("id").str();
+					Logger.info("FS uid " + uid);
+					
 					User user = User.all().filter("fourSquareId", uid).get();
 					if (user == null) { 
+						Logger.info("User is null, getting info");
 						Json item = json.map();
 						item.put("type", type);
 						item.put("firstName", json2.get("user").get("firstName")); 
@@ -125,12 +129,14 @@ public class BigBrotherHelper {
 							services.put("twitter", Json.map().put("url", "http://twitter.com/" + contactInfo.get("twitter").str()).put("username", contactInfo.get("twitter").str()));
 						}
 						if (!services.containsKey("foursquare")) {
-							services.put("foursquare", Json.map().put("url", "https://foursquare.com/" + uid).put("username", uid));
+							services.put("foursquare", Json.map().put("url", "https://foursquare.com/user/" + uid).put("username", uid));
 						}
 						item.put("services", services);
 						user = User.createUserFromItem(item);
 						user.insert();
 						
+					} else {
+						Logger.info("User is not null " + user.id);
 					}
 					
 					people.add(user);
