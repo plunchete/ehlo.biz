@@ -48,9 +48,7 @@ public class BigBrotherHelper {
 	public static Json consume4SQCoordinates(String coordinates, String token){
 		String url = END_POINTS_URL + token + "&ll="+coordinates + "&v=20110910";
 		try {
-			Logger.info("url -> " + url);
 			Json results=URLHelper.fetchJson(url);
-			Logger.info("results " + results.toString());
 			return(results);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -104,8 +102,11 @@ public class BigBrotherHelper {
 				if(items.isEmpty() || items.isNull()) continue;
 				for(Json json2 : items){
 					String uid = json2.get("user").get("id").str();
+					Logger.info("FS uid " + uid);
+					
 					User user = User.all().filter("fourSquareId", uid).get();
 					if (user == null) { 
+						Logger.info("User is null, getting info");
 						Json item = json.map();
 						item.put("type", type);
 						item.put("firstName", json2.get("user").get("firstName")); 
@@ -134,6 +135,8 @@ public class BigBrotherHelper {
 						user = User.createUserFromItem(item);
 						user.insert();
 						
+					} else {
+						Logger.info("User is not null " + user.id);
 					}
 					
 					people.add(user);

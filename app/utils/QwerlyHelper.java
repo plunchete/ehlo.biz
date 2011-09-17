@@ -30,7 +30,6 @@ public class QwerlyHelper {
 					
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		
@@ -50,7 +49,6 @@ public class QwerlyHelper {
 					
 				}
 			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 
