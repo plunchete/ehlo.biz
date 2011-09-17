@@ -43,12 +43,18 @@ public class User extends Model {
 	
 	public static User createUserFromItem(Json item) {
 		User user = new User();
-		user.firstName = item.get("firstName").str();
-		user.lastName = item.get("lastName").str();
-		user.photoUrl = item.get("photo").str();
-		user.fourSquareId = item.get("id").str();
-		user.bio = item.get("bio").str();
-		user.services = item.get("services");
+		if (item.containsKey("firstName") && !item.get("firstName").isNull())
+			user.firstName = item.get("firstName").str();
+		if (item.containsKey("lastName") && !item.get("lastName").isNull())
+			user.lastName = item.get("lastName").str();
+		if (item.containsKey("photo") && !item.get("photo").isNull())
+			user.photoUrl = item.get("photo").str();
+		if (item.containsKey("id") && !item.get("id").isNull())
+			user.fourSquareId = item.get("id").str();
+		if (item.containsKey("bio") && !item.get("bio").isNull())
+			user.bio = item.get("bio").str();
+		if (item.containsKey("services") && !item.get("services").isNull())
+			user.services = item.get("services");
 		
 		return user;
 	}
