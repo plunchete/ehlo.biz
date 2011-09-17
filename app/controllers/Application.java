@@ -18,6 +18,7 @@ public class Application extends Controller {
     }
 
     public static void doLogin(String latitude, String longitude) {
+    	Logger.info("latitude " + latitude +". longitude " + longitude);
     	if (latitude == null || latitude.isEmpty()) {
     		latitude = "37.7712498";
     	}

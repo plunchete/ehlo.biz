@@ -8,15 +8,21 @@
 </div>
 
 #{set 'moreScripts'}
+<script src="@{'/public/javascripts/geo-min.js'}" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript" charset="utf-8">
-var latitude = 0;
-var longitude = 0;
-navigator.geolocation.getCurrentPosition(showMap);
+if(geo_position_js.init()){
+	geo_position_js.getCurrentPosition(success_callback,error_callback,{enableHighAccuracy:true,options:5000});
+}
+else{
+	alert("Functionality not available");
+}
 
-function showMap(position) {
-	latitude = position.coords.latitude;
-	longitude = position.coords.longitude;
-	$('#login').attr('href', '@@{Application.doLogin()}'+ '?latitude=' + latitude + '&longitude=' + longitude);
+function success_callback(p) {
+	$('#login').attr('href', '@@{Application.doLogin()}'+ '?latitude=' + p.coords.latitude.toFixed(2) + '&longitude=' + p.coords.longitude.toFixed(2));
+}
+
+function error_callback(p) {
+	alert('error='+p.message);
 }
 </script>
 #{/set}
