@@ -39,8 +39,8 @@ public class BigBrotherHelper {
 			} else {
 				processedVenue.put("image", "https://foursquare.com/img/categories/building/default.png");
 			}
-			
-			processedVenues.add(processedVenue);
+			if (processedVenue.get("count").asInt() > 0)
+				processedVenues.add(processedVenue);
 		}
 		return processedVenues;
 	}
